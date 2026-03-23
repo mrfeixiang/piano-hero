@@ -1,183 +1,210 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
 <head>
-Show less
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Piano Hero</title>
-  <link rel="stylesheet" href="piano.css">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2575.6">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+  </style>
 </head>
 <body>
-  <!-- SCREEN 1: Main Menu -->
-  <div id="screen-menu" class="screen active">
-    <div class="menu-content">
-      <h1 class="game-title">Piano Hero</h1>
-      <p class="menu-subtitle">Press the keys when notes reach the bottom!</p>
-      <div class="menu-buttons">
-        <button id="btn-freeplay" class="btn btn-primary">Free Play</button>
-        <button id="btn-songs" class="btn btn-secondary">Practice Songs</button>
-      </div>
-      <div class="menu-controls">
-        <h3>Controls</h3>
-        <div class="control-row">
-          <span class="key-badge">A</span><span class="key-badge">S</span><span class="key-badge">D</span><span class="key-badge">F</span><span class="key-badge">G</span><span class="key-badge">H</span><span class="key-badge">J</span><span class="key-badge">K</span>
-          <span class="control-label">= White Keys (C D E F G A B C5)</span>
-        </div>
-        <div class="control-row">
-          <span class="key-badge black-kbd">W</span><span class="key-badge black-kbd">E</span><span class="key-badge black-kbd">T</span><span class="key-badge black-kbd">Y</span><span class="key-badge black-kbd">U</span>
-          <span class="control-label">= Black Keys (C# D# F# G# A#)</span>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!-- SCREEN 2: Song Selection -->
-  <div id="screen-songs" class="screen">
-    <div class="songs-content">
-      <h2>Choose a Song</h2>
-      <div id="song-list" class="song-list"></div>
-      <button id="btn-back-menu" class="btn btn-back">← Back</button>
-    </div>
-  </div>
-  <!-- SCREEN 3: The Game -->
-  <div id="screen-game" class="screen">
-    <!-- HUD -->
-    <div id="hud">
-      <div class="hud-left">
-        <span id="hud-score">Score: 0</span>
-        <span id="hud-combo" class="combo-display">Combo: 0x</span>
-      </div>
-      <div class="hud-center">
-        <span id="hud-song-name">Free Play</span>
-      </div>
-      <div class="hud-right">
-        <button id="btn-pause" class="btn btn-hud">⏸ Pause</button>
-      </div>
-    </div>
-    <!-- Countdown overlay -->
-    <div id="countdown-overlay" class="hidden">
-      <div id="countdown-number"></div>
-    </div>
-    <!-- Falling notes area -->
-    <div id="note-highway">
-      <div class="lane" id="lane-C4"  data-note="C4">
-        <div class="lane-label">A</div>
-        <div class="lane-line"></div>
-      </div>
-      <div class="lane" id="lane-D4"  data-note="D4">
-        <div class="lane-label">S</div>
-        <div class="lane-line"></div>
-      </div>
-      <div class="lane" id="lane-E4"  data-note="E4">
-        <div class="lane-label">D</div>
-        <div class="lane-line"></div>
-      </div>
-      <div class="lane" id="lane-F4"  data-note="F4">
-        <div class="lane-label">F</div>
-        <div class="lane-line"></div>
-      </div>
-      <div class="lane" id="lane-G4"  data-note="G4">
-        <div class="lane-label">G</div>
-        <div class="lane-line"></div>
-      </div>
-      <div class="lane" id="lane-A4"  data-note="A4">
-        <div class="lane-label">H</div>
-        <div class="lane-line"></div>
-      </div>
-      <div class="lane" id="lane-B4"  data-note="B4">
-        <div class="lane-label">J</div>
-        <div class="lane-line"></div>
-      </div>
-      <div class="lane" id="lane-C5"  data-note="C5">
-        <div class="lane-label">K</div>
-        <div class="lane-line"></div>
-      </div>
-      <!-- Black key lanes (overlaid) -->
-      <div class="lane black-lane" id="lane-Cs4" data-note="C#4"></div>
-      <div class="lane black-lane" id="lane-Ds4" data-note="D#4"></div>
-      <div class="lane black-lane" id="lane-Fs4" data-note="F#4"></div>
-      <div class="lane black-lane" id="lane-Gs4" data-note="G#4"></div>
-      <div class="lane black-lane" id="lane-As4" data-note="A#4"></div>
-      <!-- Hit zone -->
-      <div id="hit-zone"></div>
-    </div>
-    <!-- Feedback popup -->
-    <div id="feedback-popup"></div>
-    <!-- Piano keyboard -->
-    <div id="piano-keyboard">
-      <!-- White keys -->
-      <div class="white-key" id="key-C4"  data-note="C4">
-        <div class="key-note-label">C</div>
-        <div class="key-kbd-label">A</div>
-      </div>
-      <div class="white-key" id="key-D4"  data-note="D4">
-        <div class="key-note-label">D</div>
-        <div class="key-kbd-label">S</div>
-      </div>
-      <div class="white-key" id="key-E4"  data-note="E4">
-        <div class="key-note-label">E</div>
-        <div class="key-kbd-label">D</div>
-      </div>
-      <div class="white-key" id="key-F4"  data-note="F4">
-        <div class="key-note-label">F</div>
-        <div class="key-kbd-label">F</div>
-      </div>
-      <div class="white-key" id="key-G4"  data-note="G4">
-        <div class="key-note-label">G</div>
-        <div class="key-kbd-label">G</div>
-      </div>
-      <div class="white-key" id="key-A4"  data-note="A4">
-        <div class="key-note-label">A</div>
-        <div class="key-kbd-label">H</div>
-      </div>
-      <div class="white-key" id="key-B4"  data-note="B4">
-        <div class="key-note-label">B</div>
-        <div class="key-kbd-label">J</div>
-      </div>
-      <div class="white-key" id="key-C5"  data-note="C5">
-        <div class="key-note-label">C</div>
-        <div class="key-kbd-label">K</div>
-      </div>
-      <!-- Black keys (absolutely positioned) -->
-      <div class="black-key" id="key-Cs4" data-note="C#4" data-pos="0">
-        <div class="key-kbd-label">W</div>
-      </div>
-      <div class="black-key" id="key-Ds4" data-note="D#4" data-pos="1">
-        <div class="key-kbd-label">E</div>
-      </div>
-      <div class="black-key" id="key-Fs4" data-note="F#4" data-pos="3">
-        <div class="key-kbd-label">T</div>
-      </div>
-      <div class="black-key" id="key-Gs4" data-note="G#4" data-pos="4">
-        <div class="key-kbd-label">Y</div>
-      </div>
-      <div class="black-key" id="key-As4" data-note="A#4" data-pos="5">
-        <div class="key-kbd-label">U</div>
-      </div>
-    </div>
-  </div>
-  <!-- SCREEN 4: Pause overlay -->
-  <div id="screen-pause" class="screen overlay">
-    <div class="overlay-box">
-      <h2>Paused</h2>
-      <button id="btn-resume" class="btn btn-primary">▶ Resume</button>
-      <button id="btn-quit"   class="btn btn-danger">Quit to Menu</button>
-    </div>
-  </div>
-  <!-- SCREEN 5: Results -->
-  <div id="screen-results" class="screen">
-    <div class="results-content">
-      <h2>Song Complete!</h2>
-      <div id="result-song-name" class="result-song-name"></div>
-      <div id="result-grade" class="result-grade"></div>
-      <div id="result-score" class="result-score"></div>
-      <div id="result-new-best" class="result-new-best hidden">🏆 New Best!</div>
-      <div id="result-stats" class="result-stats"></div>
-      <div class="result-buttons">
-        <button id="btn-play-again" class="btn btn-primary">Play Again</button>
-        <button id="btn-result-menu" class="btn btn-secondary">Main Menu</button>
-      </div>
-    </div>
-  </div>
-  <script src="piano.js"></script>
+<p class="p1">&lt;!DOCTYPE html&gt;</p>
+<p class="p1">&lt;html lang="en"&gt;</p>
+<p class="p1">&lt;head&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;meta charset="UTF-8"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;title&gt;Piano Hero&lt;/title&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;link rel="stylesheet" href="piano.css"&gt;</p>
+<p class="p1">&lt;/head&gt;</p>
+<p class="p1">&lt;body&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;!-- SCREEN 1: Main Menu --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div id="screen-menu" class="screen active"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="menu-content"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;h1 class="game-title"&gt;Piano Hero&lt;/h1&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;p class="menu-subtitle"&gt;Press the keys when notes reach the bottom!&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="menu-buttons"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;button id="btn-freeplay" class="btn btn-primary"&gt;Free Play&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;button id="btn-songs" class="btn btn-secondary"&gt;Practice Songs&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="menu-controls"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;h3&gt;Controls&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="control-row"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;span class="key-badge"&gt;A&lt;/span&gt;&lt;span class="key-badge"&gt;S&lt;/span&gt;&lt;span class="key-badge"&gt;D&lt;/span&gt;&lt;span class="key-badge"&gt;F&lt;/span&gt;&lt;span class="key-badge"&gt;G&lt;/span&gt;&lt;span class="key-badge"&gt;H&lt;/span&gt;&lt;span class="key-badge"&gt;J&lt;/span&gt;&lt;span class="key-badge"&gt;K&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;span class="control-label"&gt;= White Keys (C D E F G A B C5)&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="control-row"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;span class="key-badge black-kbd"&gt;W&lt;/span&gt;&lt;span class="key-badge black-kbd"&gt;E&lt;/span&gt;&lt;span class="key-badge black-kbd"&gt;T&lt;/span&gt;&lt;span class="key-badge black-kbd"&gt;Y&lt;/span&gt;&lt;span class="key-badge black-kbd"&gt;U&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;span class="control-label"&gt;= Black Keys (C# D# F# G# A#)&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;!-- SCREEN 2: Song Selection --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div id="screen-songs" class="screen"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="songs-content"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;h2&gt;Choose a Song&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div id="song-list" class="song-list"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;button id="btn-back-menu" class="btn btn-back"&gt;← Back&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;!-- SCREEN 3: The Game --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div id="screen-game" class="screen"&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- HUD --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div id="hud"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="hud-left"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;span id="hud-score"&gt;Score: 0&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;span id="hud-combo" class="combo-display"&gt;Combo: 0x&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="hud-center"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;span id="hud-song-name"&gt;Free Play&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="hud-right"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;button id="btn-pause" class="btn btn-hud"&gt;⏸ Pause&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- Countdown overlay --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div id="countdown-overlay" class="hidden"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div id="countdown-number"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- Falling notes area --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div id="note-highway"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="lane" id="lane-C4"<span class="Apple-converted-space">  </span>data-note="C4"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="lane-label"&gt;A&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="lane-line"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="lane" id="lane-D4"<span class="Apple-converted-space">  </span>data-note="D4"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="lane-label"&gt;S&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="lane-line"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="lane" id="lane-E4"<span class="Apple-converted-space">  </span>data-note="E4"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="lane-label"&gt;D&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="lane-line"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="lane" id="lane-F4"<span class="Apple-converted-space">  </span>data-note="F4"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="lane-label"&gt;F&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="lane-line"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="lane" id="lane-G4"<span class="Apple-converted-space">  </span>data-note="G4"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="lane-label"&gt;G&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="lane-line"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="lane" id="lane-A4"<span class="Apple-converted-space">  </span>data-note="A4"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="lane-label"&gt;H&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="lane-line"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="lane" id="lane-B4"<span class="Apple-converted-space">  </span>data-note="B4"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="lane-label"&gt;J&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="lane-line"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="lane" id="lane-C5"<span class="Apple-converted-space">  </span>data-note="C5"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="lane-label"&gt;K&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="lane-line"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;!-- Black key lanes (overlaid) --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="lane black-lane" id="lane-Cs4" data-note="C#4"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="lane black-lane" id="lane-Ds4" data-note="D#4"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="lane black-lane" id="lane-Fs4" data-note="F#4"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="lane black-lane" id="lane-Gs4" data-note="G#4"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="lane black-lane" id="lane-As4" data-note="A#4"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;!-- Hit zone --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div id="hit-zone"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- Feedback popup --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div id="feedback-popup"&gt;&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- Piano keyboard --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div id="piano-keyboard"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;!-- White keys --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="white-key" id="key-C4"<span class="Apple-converted-space">  </span>data-note="C4"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="key-note-label"&gt;C&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="key-kbd-label"&gt;A&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="white-key" id="key-D4"<span class="Apple-converted-space">  </span>data-note="D4"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="key-note-label"&gt;D&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="key-kbd-label"&gt;S&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="white-key" id="key-E4"<span class="Apple-converted-space">  </span>data-note="E4"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="key-note-label"&gt;E&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="key-kbd-label"&gt;D&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="white-key" id="key-F4"<span class="Apple-converted-space">  </span>data-note="F4"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="key-note-label"&gt;F&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="key-kbd-label"&gt;F&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="white-key" id="key-G4"<span class="Apple-converted-space">  </span>data-note="G4"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="key-note-label"&gt;G&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="key-kbd-label"&gt;G&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="white-key" id="key-A4"<span class="Apple-converted-space">  </span>data-note="A4"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="key-note-label"&gt;A&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="key-kbd-label"&gt;H&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="white-key" id="key-B4"<span class="Apple-converted-space">  </span>data-note="B4"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="key-note-label"&gt;B&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="key-kbd-label"&gt;J&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="white-key" id="key-C5"<span class="Apple-converted-space">  </span>data-note="C5"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="key-note-label"&gt;C&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="key-kbd-label"&gt;K&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;!-- Black keys (absolutely positioned) --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="black-key" id="key-Cs4" data-note="C#4" data-pos="0"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="key-kbd-label"&gt;W&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="black-key" id="key-Ds4" data-note="D#4" data-pos="1"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="key-kbd-label"&gt;E&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="black-key" id="key-Fs4" data-note="F#4" data-pos="3"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="key-kbd-label"&gt;T&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="black-key" id="key-Gs4" data-note="G#4" data-pos="4"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="key-kbd-label"&gt;Y&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="black-key" id="key-As4" data-note="A#4" data-pos="5"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="key-kbd-label"&gt;U&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;!-- SCREEN 4: Pause overlay --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div id="screen-pause" class="screen overlay"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="overlay-box"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;h2&gt;Paused&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;button id="btn-resume" class="btn btn-primary"&gt;▶ Resume&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;button id="btn-quit" <span class="Apple-converted-space">  </span>class="btn btn-danger"&gt;Quit to Menu&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;!-- SCREEN 5: Results --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div id="screen-results" class="screen"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="results-content"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;h2&gt;Song Complete!&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div id="result-song-name" class="result-song-name"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div id="result-grade" class="result-grade"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div id="result-score" class="result-score"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div id="result-new-best" class="result-new-best hidden"&gt;🏆 New Best!&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div id="result-stats" class="result-stats"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="result-buttons"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;button id="btn-play-again" class="btn btn-primary"&gt;Play Again&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;button id="btn-result-menu" class="btn btn-secondary"&gt;Main Menu&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;script src="piano.js"&gt;&lt;/script&gt;</p>
+<p class="p1">&lt;/body&gt;</p>
+<p class="p1">&lt;/html&gt;</p>
 </body>
 </html>
